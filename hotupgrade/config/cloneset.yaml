@@ -1,0 +1,19 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  labels:
+    app: hotupgrade
+  name: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotupgrade
+  template:
+    metadata:
+      labels:
+        app: hotupgrade
+    spec:
+      containers:
+        - name: busybox
+          image: openkruise/hotupgrade-sample:busybox
