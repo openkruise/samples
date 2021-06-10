@@ -14,9 +14,6 @@ spec:
       lifecycle:
         postStart:
           exec:
-            # If the environment variable SIDECARSET_VERSION=1, this is the first time sidecar container has been started, and it exit without doing anything
-            # If the environment variable SIDECARSET_VERSION>1, indicates that this is a hot upgrade of sidecar container,
-            # then the script needs to complete the migration in the hot upgrade
             command:
               - /bin/sh
               - /migrate.sh

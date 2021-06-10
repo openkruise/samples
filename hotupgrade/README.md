@@ -1,12 +1,14 @@
 # sidecarset hotupgrade demo
-## Migration核心逻辑
-SidecarSet热升级机制不仅完成了mesh容器的切换，并且提供了新老版本的协调机制（PostStartHook），但是至此还只是万里长征的第一步，Mesh容器同时还需要提供PostSartHook脚本来完成mesh服务自身的平滑升级（上述Migration过程），如：Envoy热重启、Mosn无损重启。
+## Migration
+The SidecarSet hot upgrade mechanism not only completes the switching of mesh containers and provides a coordination mechanism for old and new versions, but this is only the first step in a long journey. 
+The mesh container also needs to provide a PostStartHook script to complete the hot migration of the mesh service itself (the above Migration process), such as Envoy hot restart and Mosn lossless restart.
 
-mesh容器一般都是通过监听固定端口来对外提供服务，此类mesh容器的migration过程可以概括为：通过UDS传递ListenFD和停止Accpet、开始排水。针对不支持热重启的mesh容器可以参考此过程完成改造，逻辑图如下：
+The migration process of such mesh containers can be summarized as follows: send ListenFD via UDS and stop accepting new requests, start draining. 
+For mesh containers that do not support migration you can refer to this process to complete the rebuilding. The logic diagram is as follows:
 
 ![migration](img/migration.png)                             
 
-## 实践
+## Examples
 ### 1. create sidecarSet
 kubectl apply -f config/sidecarset.yaml
 ```
@@ -25,10 +27,8 @@ spec:
       lifecycle:
         postStart:
           exec:
-            # If the environment variable SIDECARSET_VERSION=1, this is the first time sidecar container has been started, and it exit without doing anything
-            # If the environment variable SIDECARSET_VERSION>1, indicates that this is a hot upgrade of sidecar container,
-            # then the script needs to complete the migration in the hot upgrade
             command:
+              - /bin/sh
               - /migrate.sh
       upgradeStrategy:
         upgradeType: HotUpgrade
