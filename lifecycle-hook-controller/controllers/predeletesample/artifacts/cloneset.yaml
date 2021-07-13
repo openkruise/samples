@@ -1,0 +1,39 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: CloneSet
+metadata:
+  name: cloneset-hook-example
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: guestbook
+  lifecycle:
+    preDelete:
+      labelsHandler:
+        hook.example.kruise.io/unready-blocker: "true"
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        hook.example.kruise.io/unready-blocker: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - guestbook
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - name: main
+        image: registry.cn-hangzhou.aliyuncs.com/kruise-test/guestbook:v1
+  updateStrategy:
+    type: InPlaceIfPossible
+    maxUnavailable: 20%
+    inPlaceUpdateStrategy:
+      gracePeriodSeconds: 3
