@@ -1,0 +1,39 @@
+apiVersion: apps.kruise.io/v1alpha1
+kind: ResourceDistributionGenerator
+metadata:
+  name: rdname
+  annotations:
+    config.kubernetes.io/function: |
+      exec: 
+        path: ./resourcedistributiongenerator
+resource:
+  resourceKind: ConfigMap
+  resourceName: cmname
+  envs:
+    - data.env
+  files:
+    - application.properties
+  literals:
+    - JAVA_HOME=/opt/java/jdk
+    - foo=bar
+    - one=1
+  resourceOptions:
+    annotations:
+      dashboard: "1"
+    immutable: true
+options:
+  labels:
+    app.kubernetes.io/name: "app1"
+targets:
+  includedNamespaces:
+    - ns-1
+    - ns-2
+  namespaceLabelSelector:
+    matchLabels:
+      group: "test"
+    matchExpressions:
+      - key: exc
+        operator: NotIn
+        values:
+          - abc
+          - e
