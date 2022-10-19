@@ -1,0 +1,1 @@
+Before using it, download the resourcedistributiongenerator for your system and architecture version from this [page](https://github.com/openkruise/kruise-tools/releases/latest) and place it in this directory.
