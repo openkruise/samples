@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-server
+  labels:
+    app: echo-server
+spec:
+  selector:
+    matchLabels:
+      app: echo-server
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: echo-server
+    spec:
+      containers:
+        - name: echo-server
+          env: 
+          - name: stable
+          image: registry.cn-hangzhou.aliyuncs.com/haoshuwei24/echo-server:v1.0
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-server
+  labels:
+    app: echo-server
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: echo-server
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-demo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: echo-server
+            port:
+              number: 8080
