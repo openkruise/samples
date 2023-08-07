@@ -17,7 +17,7 @@ spec:
       containers:
         - name: echo-server
           env: 
-          - name: stable
+          - name: canary
           image: registry.cn-hangzhou.aliyuncs.com/haoshuwei24/echo-server:v1.0
           imagePullPolicy: Always
           resources:
