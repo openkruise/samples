@@ -1,0 +1,34 @@
+apiVersion: rollouts.kruise.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+  annotations:
+    rollouts.kruise.io/rolling-style: partition
+spec:
+  objectRef:
+    workloadRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: echo-server
+  strategy:
+    canary:
+      steps:
+      - replicas: 20%
+        weight: 20
+      - replicas: 40%
+        weight: 40
+        pause:
+          duration: 60
+      - replicas: 60%
+        weight: 60
+        pause:
+          duration: 60
+      - replicas: 80%
+        weight: 80
+        pause:
+          duration: 60
+      trafficRoutings:
+      - service: echo-server
+        ingress:
+          classType: nginx
+          name: ingress-demo
