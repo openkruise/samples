@@ -18,15 +18,11 @@ spec:
       - replicas: 20%
         weight: 20
         pause:
-          duration: 60
-      - replicas: 50%
-        weight: 50
-        pause:
-          duration: 60
+          duration: 10
       - replicas: 100%
         weight: 100
         pause:
-          duration: 60
+          duration: 0
       trafficRoutings:
       - service: echo-server
         ingress:
