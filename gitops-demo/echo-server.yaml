@@ -16,9 +16,24 @@ spec:
     spec:
       containers:
         - name: echo-server
-          env: 
-          - name: canary
-          image: registry.cn-hangzhou.aliyuncs.com/haoshuwei24/echo-server:v1.0
+          env:
+          - name: PORT
+            value: '8080'
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: NODE_NAME
+            value: version1
+          image: cilium/echoserver:latest
           imagePullPolicy: Always
           resources:
             requests:
@@ -51,7 +66,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /testpath
+      - path: /apis/echo
         pathType: Prefix
         backend:
           service:
