@@ -16,7 +16,7 @@ spec:
       - replicas: 10%
         weight: 5
       - replicas: 20%
-        weight: 20%
+        weight: 20
         pause:
           duration: 60
       - replicas: 50%
