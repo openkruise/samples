@@ -13,18 +13,18 @@ spec:
   strategy:
     canary:
       steps:
+      - replicas: 10%
+        weight: 5
       - replicas: 20%
-        weight: 20
-      - replicas: 40%
-        weight: 40
+        weight: 20%
         pause:
           duration: 60
-      - replicas: 60%
-        weight: 60
+      - replicas: 50%
+        weight: 50
         pause:
           duration: 60
-      - replicas: 80%
-        weight: 80
+      - replicas: 100%
+        weight: 100
         pause:
           duration: 60
       trafficRoutings:
