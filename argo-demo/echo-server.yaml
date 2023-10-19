@@ -32,7 +32,7 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
           - name: NODE_NAME
-            value: v2
+            value: failed
           image: cilium/echoserver:latest
           imagePullPolicy: Always
           resources:
